@@ -1,42 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getPostById } from '../../services/postService'
+import * as postService from '../../services/postService'
 import Comments from '../comments'
+import { usePostContext } from '../../context/post-context'
 
-const PostDetails = ({ selectedPost, setSelectedPost, deletePost: handleDeletePost, updatePost }) => {
-  const { id, title, author, content, comments } = selectedPost
+const PostDetails = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const formRef = useRef()
 
-  const handleSave = (e) => {
+  const [selectedPost, setSelectedPost] = useState(null)
+  const { selectedPostId, setSelectedPostId, setPosts } = usePostContext();
+
+  const handleSave = async (e) => {
     e.preventDefault()
     const formData = new FormData(formRef.current)
     const updatedTitle = formData.get("title")
     const updatedAuthor = formData.get("author")
-    updatePost({ id, title: updatedTitle, author: updatedAuthor })
+    const updatedPost = { title: updatedTitle, author: updatedAuthor }
+    await postService.updatePost(selectedPost.id, updatedPost)
+    setPosts(prevPosts => prevPosts.map(post => post.id === selectedPost.id ? { ...post, title: updatedTitle, author: updatedAuthor } : post))
+    setSelectedPostId(null)
     setIsEditMode(false)
+  }
+
+  const handleDeletePost = async (post) => {
+    await postService.deletePost(post.id)
+    setPosts(prevPosts => prevPosts.filter(p => p.id !== post.id))
+    setSelectedPostId(null)
   }
 
   useEffect(() => {
     async function fetchPostById() {
-      const post = await getPostById(selectedPost.id)
+      const post = await postService.getPostById(selectedPostId)
       setSelectedPost(post)
     }
     fetchPostById()
-  }, [selectedPost.id])
+  }, [selectedPostId])
 
+  if (!selectedPost) return <div>Loading...</div>
+
+  const { id, title, author, content, comments } = selectedPost
   return (
     <div>
       {
         isEditMode ?
           <div >
-            <form ref={formRef}>
+            <form ref={formRef} onSubmit={handleSave}>
               <p>
                 <label htmlFor="title">Title: <input type="text" name="title" id="title" defaultValue={title} /></label>
               </p>
               <p>
                 <label htmlFor='author'>Author: <input type="text" name="author" id="author" defaultValue={author} /></label>
               </p>
-              <button onClick={handleSave}>Save</button>
+              <button >Save</button>
               <button onClick={() => setIsEditMode(false)}>Cancel</button>
             </form>
           </div>

@@ -3,51 +3,17 @@ import Posts from '../components/posts'
 import PostDetails from '../components/post/post-details'
 import * as postService from '../services/postService'
 import AddPost from '../components/post/add-post'
-
-const initialPosts = [
-    {
-        id: 111,
-        title: "Happiness",
-        author: "John"
-
-    },
-    {
-        id: 112,
-        title: "MIU",
-        author: "Dean"
-
-
-    },
-    {
-        id: 113,
-        title: " Enjoy Life",
-        author: "Jasmine"
-
-    },
-]
+import { usePostContext } from '../context/post-context'
 
 const Dashboard = () => {
 
-    const [selectedPost, setSelectedPost] = useState(null)
-    const [posts, setPosts] = useState(initialPosts)
+    const { posts, setPosts } = usePostContext()
+    const { selectedPostId, setSelectedPostId } = usePostContext()
     const [name, setName] = useState("")
     const [isAddPostMode, setIsAddPostMode] = useState(true)
 
     const handleChangeName = () => {
         setPosts(prevPosts => prevPosts.map(post => post.id === 111 ? { ...post, author: name } : post))
-    }
-
-    const handleSelectedPost = (post) => setSelectedPost(post)
-
-    const handleDeletePost = async (post) => {
-        await postService.deletePost(post.id)
-        setPosts(prevPosts => prevPosts.filter(p => p.id !== post.id))
-        setSelectedPost(null)
-    }
-
-    const updatePost = (updatedPost) => {
-        setPosts(prevPosts => prevPosts.map(post => post.id === updatedPost.id ? { ...updatedPost } : post))
-        setSelectedPost(null)
     }
 
     useEffect(() => {
@@ -60,23 +26,13 @@ const Dashboard = () => {
 
     return (
         <>
-
             <h2>Add a post</h2>
-            {isAddPostMode &&
-                <AddPost />
-            }
-
+            {isAddPostMode && <AddPost />}
             <h2>List of posts</h2>
-            <Posts posts={posts} onSelectedPost={handleSelectedPost} />
+            {posts && <Posts posts={posts} />}
             <input type="text" name="name" id="" onChange={(e) => setName(e.target.value)} />
             <button onClick={handleChangeName}>Change Name</button>
-            {selectedPost &&
-                <PostDetails
-                    selectedPost={selectedPost}
-                    deletePost={handleDeletePost}
-                    updatePost={updatePost}
-                    setSelectedPost={setSelectedPost}
-                />}
+            {selectedPostId && <PostDetails />}
 
 
         </>

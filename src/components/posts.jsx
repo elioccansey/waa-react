@@ -1,8 +1,8 @@
 import Post from './post/post'
 
-const Posts = ({posts, onSelectedPost}) => {
+const Posts = ({ posts }) => {
   return <div className='container'>
-      {posts.map(post => <Post key={post.id} post={post} onSelectedPost={onSelectedPost}/>)}
+    {posts.map(post => <Post key={post.id} post={post} />)}
   </div>
 }
 
