@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Posts from '../components/posts'
 import PostDetails from '../components/post/post-details'
 import * as postService from '../services/postService'
+import AddPost from '../components/post/add-post'
 
 const initialPosts = [
     {
@@ -30,6 +31,7 @@ const Dashboard = () => {
     const [selectedPost, setSelectedPost] = useState(null)
     const [posts, setPosts] = useState(initialPosts)
     const [name, setName] = useState("")
+    const [isAddPostMode, setIsAddPostMode] = useState(true)
 
     const handleChangeName = () => {
         setPosts(prevPosts => prevPosts.map(post => post.id === 111 ? { ...post, author: name } : post))
@@ -58,6 +60,13 @@ const Dashboard = () => {
 
     return (
         <>
+
+            <h2>Add a post</h2>
+            {isAddPostMode &&
+                <AddPost />
+            }
+
+            <h2>List of posts</h2>
             <Posts posts={posts} onSelectedPost={handleSelectedPost} />
             <input type="text" name="name" id="" onChange={(e) => setName(e.target.value)} />
             <button onClick={handleChangeName}>Change Name</button>
@@ -68,6 +77,8 @@ const Dashboard = () => {
                     updatePost={updatePost}
                     setSelectedPost={setSelectedPost}
                 />}
+
+
         </>
     )
 }

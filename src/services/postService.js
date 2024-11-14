@@ -11,3 +11,8 @@ export const deletePost = async (id) => {
 }
 
 export const getPostById = async (id) => api.get(POSTS_BASE_URL + id).then(res => res.data);
+
+export const addPost = async(post) => api.post(
+    POSTS_BASE_URL,
+    post
+).then(res => res.data)

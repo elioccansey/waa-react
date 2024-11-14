@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getPostById } from '../../services/postService'
+import Comments from '../comments'
 
 const PostDetails = ({ selectedPost, setSelectedPost, deletePost: handleDeletePost, updatePost }) => {
-  const { id, title, author, content } = selectedPost
+  const { id, title, author, content, comments } = selectedPost
   const [isEditMode, setIsEditMode] = useState(false)
   const formRef = useRef()
 
@@ -45,6 +46,7 @@ const PostDetails = ({ selectedPost, setSelectedPost, deletePost: handleDeletePo
               <h2>{title}</h2>
               <p>{author}</p>
               <p>{content}</p>
+              {comments && <Comments comments={comments} />}
               <button onClick={() => setIsEditMode(true)}>Edit</button>
               <button onClick={() => handleDeletePost(selectedPost)}>Delete</button>
             </article>
