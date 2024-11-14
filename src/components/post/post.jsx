@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
 
-const Post = ({post, selectedPost}) => {
-  const {title, author, id} = post
-
+const Post = ({post, onSelectedPost}) => {
+  const {id, title, author} = post
   return (
-    <>
-      <article id={id}>
+      <article id={id} className='post' onClick={()=>onSelectedPost(post)}>
         <h2> {title} </h2>
         <p>{author}</p>
-      {selectedPost?.id == id && <PostDetails selectedPost={selectedPost} /> } 
       </article>
-    </>
   )
 }
 
