@@ -9,4 +9,4 @@ const Comments = ({ comments }) => {
     )
 }
 
-export default Comments
+export default React.memo(Comments)
