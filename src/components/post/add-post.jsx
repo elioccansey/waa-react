@@ -21,6 +21,7 @@ const AddPost = () => {
 
     return (
         <form ref={formRef} onSubmit={handleAddPost}>
+            <h2>Add a post</h2>
             <p>
                 <label htmlFor="title">Title : <input type="text" id='title' name='title' /> </label>
             </p>

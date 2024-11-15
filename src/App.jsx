@@ -1,11 +1,12 @@
+import { Outlet } from 'react-router-dom'
+import Navbar from './components/navbar'
 import { PostContextProvider } from './context/post-context'
-import Dashboard from './pages/dashboard'
 
 function App() {
-
   return (
     <PostContextProvider>
-      <Dashboard />
+      <Navbar />
+      <Outlet />
     </PostContextProvider>
   )
 }
